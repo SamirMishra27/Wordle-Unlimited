@@ -1,5 +1,4 @@
-export interface wordleState {
-    tileData: Array<Array<String>>,
-    currRow: Number,
-    currIndex: Number
+export interface TileRow {
+    row: string[]
+    guessed: boolean
 }

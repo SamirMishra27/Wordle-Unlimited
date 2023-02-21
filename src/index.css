@@ -11,6 +11,75 @@
 body {
     width: 100%;
     height: 100vh;
-    background-color: #404144;
+    background-color: rgb(47, 47, 49); /* #404144 */
     font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+.filled {
+    animation: bounce 115ms ease-in-out 0s 1 normal forwards;
+    border: 3px solid #565758;
+}
+
+.wordle-row div:not(.filled) {
+    animation: drop 115ms ease-in-out 0s 1 normal forwards;
+    border: 3px solid #3a3a3c;
+}
+
+.bg-correct, .bg-misplaced, .bg-wrong {
+    border: none;
+    animation: roll-over 600ms ease-in-out var(--delay) 1 normal forwards;
+}
+
+.jump {
+    animation: jump-anim 200ms ease-in-out calc(var(--delay) + 2s) 1 normal forwards;
+}
+
+.delete-after {
+    animation: fade-out 200ms ease-in-out 2s 1 normal forwards;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes drop {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.8);
+    }
+}
+
+@keyframes jump-anim {
+    0%, 100% {
+        transform: translateY(0rem);
+    }
+    50% {
+        transform: translateY(-2rem);
+    }
+}
+
+@keyframes roll-over {
+    from {
+        transform: rotateX(0deg);
+    }
+    to {
+        transform: rotateX(360deg);
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        display: none;
+    }
 }

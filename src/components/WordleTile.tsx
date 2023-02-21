@@ -1,10 +1,17 @@
-import { MutableRefObject } from "react";
+import { CSSProperties } from 'react'
 
-export default function WordleTile(props: { tile: String }) {
+export default function WordleTile(props: { tile: string; style: string; delay: number }) {
+    const { tile, style, delay } = props
+    const inlineStyle = { '--delay': `${delay}s` } as CSSProperties
     return (
-        // <div className="h-full flex items-center justify-center bg-green-700 flex-1">A</div>
-        <div className="h-full flex items-center justify-center bg-green-700 flex-1">
-            {props.tile}
+        <div
+            className={
+                'h-full flex items-center justify-center flex-1 text-6xl font-medium [user-select:none] ' +
+                +style +
+                (tile ? ' filled' : '')
+            }
+            style={inlineStyle}>
+            {tile}
         </div>
-    );
-};
+    )
+}
