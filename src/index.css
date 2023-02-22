@@ -11,7 +11,7 @@
 body {
     width: 100%;
     height: 100vh;
-    background-color: rgb(47, 47, 49); /* #404144 */
+    background-color: #0b0b0b; 
     font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
@@ -27,11 +27,11 @@ body {
 
 .bg-correct, .bg-misplaced, .bg-wrong {
     border: none;
-    animation: roll-over 600ms ease-in-out var(--delay) 1 normal forwards;
+    animation: roll-over 600ms ease-in-out calc(var(--index) * 0.25) 1 normal forwards;
 }
 
 .jump {
-    animation: jump-anim 200ms ease-in-out calc(var(--delay) + 2s) 1 normal forwards;
+    animation: jump-anim 200ms ease-in-out calc((var(--index) * 0.15) + 0.8s) 1 normal forwards;
 }
 
 .delete-after {

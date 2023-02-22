@@ -1,10 +1,12 @@
 import './index.css'
 import WordleRow from './components/WordleRow'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, MutableRefObject } from 'react'
 import WORDLE_WORDS from '../data/words'
+import { createElement } from './utils'
 
 // const randomWordIndex = Math.floor( Math.random() * WORDLE_WORDS.length );
 // const wordleWord = WORDLE_WORDS[randomWordIndex];
+const ERR_EXP_AFTER = 2.2 * 1000
 
 export default function App(): JSX.Element {
     const wordleWord = 'SAMIR'
@@ -18,13 +20,19 @@ export default function App(): JSX.Element {
     ])
     const [currRow, setRow] = useState(0)
     const [currIndex, setIndex] = useState(0)
-    const [error, setError] = useState('')
+
+    const errorSlideRef = useRef() as MutableRefObject<HTMLDivElement>
 
     function pushError(string: string) {
-        setError(string)
+        const errorChild = createElement(
+            'div',
+            'bg-slate-200 p-2 text-center font-semibold rounded-lg delete-after',
+            string
+        )
+        errorSlideRef.current.insertBefore(errorChild, errorSlideRef.current.firstChild)
         setTimeout(() => {
-            if (!error) setError('')
-        }, 2.2 * 1000)
+            errorSlideRef.current.removeChild(errorChild)
+        }, ERR_EXP_AFTER)
     }
 
     function handle(event: globalThis.KeyboardEvent) {
@@ -35,8 +43,8 @@ export default function App(): JSX.Element {
             const tileRow = tiles[currRow]
             const currGuess = tileRow.row.join('')
 
-            if (currGuess.toLowerCase() in WORDLE_WORDS) {
-                return setError('Not in word list')
+            if (!WORDLE_WORDS.includes(currGuess.toLowerCase())) {
+                return pushError('Not in word list')
             }
 
             if (currGuess.toUpperCase() === wordleWord) {
@@ -44,12 +52,20 @@ export default function App(): JSX.Element {
                 // Do something
             } else {
                 tileRow.guessed = true
-                setRow(currRow + 1)
-                setIndex(0)
                 // Do something
+                if (currRow === 4) {
+                    const answerElem = createElement(
+                        'div',
+                        'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
+                        wordleWord.toUpperCase()
+                    )
+                    errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
+                }
             }
             tiles[currRow] = tileRow
             setTiles(tiles)
+            setRow(currRow + 1)
+            setIndex(0)
         }
 
         if (event.key === 'Backspace') {
@@ -75,14 +91,10 @@ export default function App(): JSX.Element {
     })
 
     return (
-        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative">
-            <div className="w-36 bg-transparent absolute p-3 space-y-4 z-10 top-32">
-                {error && (
-                    <div className="bg-slate-200 p-2 text-center font-semibold rounded-lg delete-after">
-                        {error}
-                    </div>
-                )}
-            </div>
+        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden">
+            <div
+                className="w-48 bg-transparent absolute p-3 space-y-4 z-10 top-28"
+                ref={errorSlideRef}></div>
 
             <div className="wordle w-[30rem] h-[30rem] flex flex-col items-center justify-evenly">
                 <WordleRow tileRow={tiles[0]} wordleWord={wordleWord} />

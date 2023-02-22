@@ -4081,6 +4081,7 @@ const WORDLE_WORDS: string[] = [
     'salty',
     'salve',
     'samba',
+    'samir',
     'sands',
     'sandy',
     'saner',

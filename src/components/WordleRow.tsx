@@ -1,8 +1,16 @@
+import { useEffect, useState } from 'react'
 import { TileRow } from '../types'
 import WordleTile from './WordleTile'
 
 export default function WordleRow(props: { tileRow: TileRow; wordleWord: string }) {
     const { tileRow, wordleWord } = props
+    const [isCorrect, setCorrect] = useState(false)
+
+    useEffect(() => {
+        if (tileRow.row.join('') === wordleWord) {
+            setTimeout(() => setCorrect(true), 2000)
+        }
+    }, [tileRow.guessed])
     return (
         <div className="wordle-row w-full flex items-center justify-evenly flex-1 [column-gap:0.625rem] p-1 text-slate-200">
             {tileRow.guessed
@@ -12,7 +20,12 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                           wordleWord.slice(index, index + 1) === letter
                       ) {
                           return (
-                              <WordleTile tile={letter} style={'bg-correct'} delay={index * 0.25} />
+                              <WordleTile
+                                  tile={letter}
+                                  style={'bg-correct'}
+                                  index={index}
+                                  correct={isCorrect}
+                              />
                           )
                       } else if (
                           wordleWord.includes(letter) &&
@@ -22,12 +35,18 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                               <WordleTile
                                   tile={letter}
                                   style={'bg-misplaced'}
-                                  delay={index * 0.25}
+                                  index={index}
+                                  correct={isCorrect}
                               />
                           )
                       } else {
                           return (
-                              <WordleTile tile={letter} style={'bg-wrong'} delay={index * 0.25} />
+                              <WordleTile
+                                  tile={letter}
+                                  style={'bg-wrong'}
+                                  index={index}
+                                  correct={isCorrect}
+                              />
                           )
                       }
                   })
@@ -36,7 +55,8 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                           <WordleTile
                               tile={tileRow.row[index]}
                               style={'bg-default'}
-                              delay={index * 0.25}
+                              index={index}
+                              correct={false}
                           />
                       )
                   })}
