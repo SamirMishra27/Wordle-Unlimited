@@ -43,13 +43,23 @@ export default function App(): JSX.Element {
             const tileRow = tiles[currRow]
             const currGuess = tileRow.row.join('')
 
+            // If the word is not in global list
             if (!WORDLE_WORDS.includes(currGuess.toLowerCase())) {
                 return pushError('Not in word list')
             }
 
+            // If the guess is correct
             if (currGuess.toUpperCase() === wordleWord) {
                 tileRow.guessed = true
                 // Do something
+                setTimeout(() => {
+                    const answerElem = createElement(
+                        'div',
+                        'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
+                        'Well Done!'
+                    )
+                    errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
+                }, 2.5 * 1000)
             } else {
                 tileRow.guessed = true
                 // Do something
