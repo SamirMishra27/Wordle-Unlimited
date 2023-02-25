@@ -9,6 +9,9 @@ module.exports = {
                 misplaced: '#b59f3b',
                 wrong: '#3a3a3c',
             },
+            borderColor: {
+                correct: '#538d4e',
+            },
         },
     },
     plugins: [],

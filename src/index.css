@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --default: #121213; 
+    --correct: #538d4e;
+    --misplaced: #b59f3b;
+    --wrong: #3a3a3c;
+
+    --filled-border: 3px solid #565758;
+    --unfilled-border: 3px solid #3a3a3c;
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -18,17 +28,20 @@ body {
 
 .filled {
     animation: bounce 115ms ease-in-out 0s 1 normal forwards;
-    border: 3px solid #565758;
+    border: var(--filled-border);
 }
 
-.wordle-row div:not(.filled) {
+.filled.border-correct {
+    border: 3px solid var(--correct);
+}
+
+.wordle-tile:not(.filled){
     animation: drop 115ms ease-in-out 0s 1 normal forwards;
-    border: 3px solid #3a3a3c;
+    border: var(--unfilled-border);
 }
 
-.bg-correct, .bg-misplaced, .bg-wrong {
-    border: none;
-    animation: roll-over 600ms ease-in-out calc(var(--index) * 0.25) 1 normal forwards;
+.roll-tile {
+    animation: roll 600ms linear calc(var(--index) * 0.25) 1 normal forwards;
 }
 
 .jump {
@@ -53,7 +66,7 @@ body {
         transform: scale(1);
     }
     50% {
-        transform: scale(0.8);
+        transform: scale(0.9);
     }
 }
 
@@ -64,14 +77,8 @@ body {
     50% {
         transform: translateY(-2rem);
     }
-}
-
-@keyframes roll-over {
-    from {
-        transform: rotateX(0deg);
-    }
-    to {
-        transform: rotateX(360deg);
+    0%, 100% {
+        border: 3px solid var(--color);
     }
 }
 
@@ -82,5 +89,28 @@ body {
     to {
         opacity: 0;
         display: none;
+    }
+}
+
+@keyframes roll {
+    from {
+        transform: rotateX(0deg);
+    }
+    50% {
+        transform: rotateX(90deg);
+    }
+    50.01% {
+        transform: rotateX(270deg);
+    }
+    100% {
+        transform: rotateX(360deg);
+    }
+    from, 50% {
+        background-color: var(--default);
+        border: var(--filled-border);
+    }
+    50.01%, 100% {
+        background-color: var(--color);
+        border: 3px solid var(--color);
     }
 }

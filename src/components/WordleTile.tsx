@@ -5,16 +5,18 @@ export default function WordleTile(props: {
     style: string
     index: number
     correct: boolean
+    roll: boolean
 }) {
-    const { tile, style, index, correct } = props
-    const inlineStyle = { '--index': `${index}s` } as CSSProperties
+    const { tile, style, index, correct, roll } = props
+    const inlineStyle = { '--index': `${index}s`, '--color': style } as CSSProperties
     return (
         <div
             className={
-                'h-full flex items-center justify-center flex-1 text-6xl font-medium [user-select:none] ' +
+                'wordle-tile h-full relative text-6xl font-medium ' +
+                'flex items-center justify-center flex-1 ' +
                 (tile ? 'filled ' : '') +
-                (correct ? 'jump ' : '') +
-                style
+                (correct ? 'jump bg-correct border-correct ' : '') +
+                (roll ? 'roll-tile ' : '')
             }
             style={inlineStyle}>
             {tile}

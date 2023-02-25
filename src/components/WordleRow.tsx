@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { TileRow } from '../types'
+import { TileRow, TileColor } from '../types'
 import WordleTile from './WordleTile'
 
 export default function WordleRow(props: { tileRow: TileRow; wordleWord: string }) {
@@ -22,9 +22,10 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                           return (
                               <WordleTile
                                   tile={letter}
-                                  style={'bg-correct'}
+                                  style={TileColor.CORRECT}
                                   index={index}
                                   correct={isCorrect}
+                                  roll={true}
                               />
                           )
                       } else if (
@@ -34,18 +35,20 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                           return (
                               <WordleTile
                                   tile={letter}
-                                  style={'bg-misplaced'}
+                                  style={TileColor.MISPLACED}
                                   index={index}
                                   correct={isCorrect}
+                                  roll={true}
                               />
                           )
                       } else {
                           return (
                               <WordleTile
                                   tile={letter}
-                                  style={'bg-wrong'}
+                                  style={TileColor.WRONG}
                                   index={index}
                                   correct={isCorrect}
+                                  roll={true}
                               />
                           )
                       }
@@ -54,9 +57,10 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                       return (
                           <WordleTile
                               tile={tileRow.row[index]}
-                              style={'bg-default'}
+                              style={TileColor.MISPLACED}
                               index={index}
                               correct={false}
+                              roll={false}
                           />
                       )
                   })}
