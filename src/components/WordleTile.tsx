@@ -12,7 +12,7 @@ export default function WordleTile(props: {
     return (
         <div
             className={
-                'wordle-tile h-full relative text-6xl font-medium ' +
+                'wordle-tile h-full relative text-4xl font-medium ' +
                 'flex items-center justify-center flex-1 ' +
                 (tile ? 'filled ' : '') +
                 (correct ? 'jump bg-correct border-correct ' : '') +
