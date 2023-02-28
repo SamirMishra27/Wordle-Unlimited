@@ -8,17 +8,11 @@ export default function KeyboardKey(props: {
 }) {
     const { alphabet, onKeyClick, letterStatus } = props
     let bgColor = 'bg-gray'
-    // let bgColor = '#818384'
-    // const keyColors = {
-    //     1: '#818384',
-    //     2: '#3a3a3c',
-    //     3: '#b59f3b',
-    //     4: '#538d4e',
-    // }
+
     if (letterStatus.correct.includes(alphabet)) bgColor = 'bg-correct'
     else if (letterStatus.misplaced.includes(alphabet)) bgColor = 'bg-misplaced'
     else if (letterStatus.wrong.includes(alphabet)) bgColor = 'bg-wrong'
-    console.log(bgColor, letterStatus)
+
     return (
         <div
             className={

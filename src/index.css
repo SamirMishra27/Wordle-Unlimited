@@ -26,6 +26,10 @@ body {
     user-select: none;
 }
 
+.end-screen {
+    animation: end-screen-appear 600ms ease-in-out 0s 1 normal forwards;
+}
+
 .filled {
     animation: bounce 115ms ease-in-out 0s 1 normal forwards;
     border: var(--filled-border);
@@ -112,5 +116,16 @@ body {
     50.01%, 100% {
         background-color: var(--color);
         border: 3px solid var(--color);
+    }
+}
+
+@keyframes end-screen-appear {
+    from {
+        transform: translateY(60px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0px);
+        opacity: 1;
     }
 }

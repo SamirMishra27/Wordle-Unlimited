@@ -3,12 +3,6 @@ export interface TileRow {
     guessed: boolean
 }
 
-// export enum LetterStatus {
-//     CORRECT = 4,
-//     MISPLACED = 3,
-//     WRONG = 2,
-//     DEFAULT = 1,
-// }
 export interface LetterStatus {
     wrong: string[]
     misplaced: string[]
@@ -20,4 +14,13 @@ export enum TileColor {
     MISPLACED = '#b59f3b',
     WRONG = '#3a3a3c',
     DEFAULT = '#121213',
+}
+
+export interface AllTimeStats {
+    played: number
+    wins: number
+    winsByAttempts: number[]
+    streak: number
+    highestStreak: number
+    lastPlayed: number
 }

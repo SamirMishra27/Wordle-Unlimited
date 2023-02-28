@@ -2,21 +2,24 @@ import './index.css'
 import WordleRow from './components/WordleRow'
 import { useState, useEffect, useRef, MutableRefObject, MouseEvent } from 'react'
 import WORDLE_WORDS from '../data/words'
-import { createElement } from './utils'
+import { createElement, setLocalData } from './utils'
 import KeyboardKey from './components/KeyboardKey'
+import EndScreen from './components/EndScreen'
 import backspace from './assets/backspace.svg'
 import { TileRow } from './types'
-// import { LetterStatus } from './types'
 
-// const randomWordIndex = Math.floor( Math.random() * WORDLE_WORDS.length );
-// const wordleWord = WORDLE_WORDS[randomWordIndex];
+const randomWordIndex = Math.floor(Math.random() * WORDLE_WORDS.length)
+const wordleWord = WORDLE_WORDS[randomWordIndex].toUpperCase()
+
 const ERR_EXP_AFTER = 2.2 * 1000
 const ALPHABETS = 'abcdefghijklmnopqrstuvwxyz'
 
 export default function App(): JSX.Element {
-    const wordleWord = 'SAMIR'
+    // const wordleWord = 'SAMIR'
+    // let allTimeStats;
 
     const [tiles, setTiles] = useState([
+        { row: ['', '', '', '', ''], guessed: false },
         { row: ['', '', '', '', ''], guessed: false },
         { row: ['', '', '', '', ''], guessed: false },
         { row: ['', '', '', '', ''], guessed: false },
@@ -32,29 +35,7 @@ export default function App(): JSX.Element {
         correct: Array<string>(),
     })
     const errorSlideRef = useRef() as MutableRefObject<HTMLDivElement>
-
-    // function checkLetterStatus(letter: string) {
-    //     // let letterStatus: number = 0
-    //     let letterStatus = LetterStatus.DEFAULT
-
-    //     for (const tileRow of tiles) {
-    //         if (tileRow.row.includes(letter)) {
-    //             if (tileRow.row.indexOf(letter) === wordleWord.split('').indexOf(letter)) {
-    //                 letterStatus = LetterStatus.CORRECT
-    //             } else if (
-    //                 tileRow.row.indexOf(letter) !== wordleWord.split('').indexOf(letter) &&
-    //                 letterStatus < 4
-    //             ) {
-    //                 letterStatus = LetterStatus.MISPLACED
-    //             } else if (!wordleWord.split('').includes(letter) && letterStatus < 3) {
-    //                 letterStatus = LetterStatus.WRONG
-    //             } else {
-    //                 if (letterStatus < 2) letterStatus = LetterStatus.DEFAULT
-    //             }
-    //         }
-    //     }
-    //     return letterStatus
-    // }
+    const [allTimeStats, setStats] = useState(null)
 
     function pushError(string: string) {
         const errorChild = createElement(
@@ -70,6 +51,13 @@ export default function App(): JSX.Element {
 
     function updateLetterStatus(tileRow: TileRow, wordleWord: string) {
         tileRow.row.forEach((letter, index) => {
+            if (
+                letterStatus.correct.includes(letter) ||
+                letterStatus.misplaced.includes(letter) ||
+                letterStatus.wrong.includes(letter)
+            )
+                return
+
             if (
                 wordleWord.split('').indexOf(letter) === index &&
                 !letterStatus.correct.includes(letter)
@@ -90,55 +78,63 @@ export default function App(): JSX.Element {
         setLetterStatus(letterStatus)
     }
 
+    function evaluateRow() {
+        if (currIndex !== 5) {
+            return pushError('Not enough words')
+        }
+        const tileRow = tiles[currRow]
+        const currGuess = tileRow.row.join('')
+
+        // If the word is not in global list
+        if (!WORDLE_WORDS.includes(currGuess.toLowerCase())) {
+            return pushError('Not in word list')
+        }
+
+        // If the guess is correct
+        if (currGuess.toUpperCase() === wordleWord) {
+            tileRow.guessed = true
+            setTimeout(() => {
+                const answerElem = createElement(
+                    'div',
+                    'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
+                    'Well Done!'
+                )
+                errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
+            }, 2.5 * 1000)
+            updateLetterStatus(tileRow, wordleWord)
+
+            setTimeout(() => {
+                setLocalData('WIN', currRow)
+            }, 5 * 1000)
+        } else {
+            // The guess is not correct
+            tileRow.guessed = true
+            // if (currRow === 4)
+            if (currRow === 5) {
+                const answerElem = createElement(
+                    'div',
+                    'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
+                    wordleWord.toUpperCase()
+                )
+                errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
+            }
+            updateLetterStatus(tileRow, wordleWord)
+
+            setTimeout(() => {
+                setLocalData('LOSS', currRow)
+            }, 5 * 1000)
+        }
+        tiles[currRow] = tileRow
+        setTiles(tiles)
+        setRow(currRow + 1)
+        setIndex(0)
+    }
+
     function handleGameAction(action: string | undefined) {
         if (!action) return
 
         if (action === 'Enter') {
-            if (currIndex !== 5) {
-                return pushError('Not enough words')
-            }
-            const tileRow = tiles[currRow]
-            const currGuess = tileRow.row.join('')
-
-            // If the word is not in global list
-            if (!WORDLE_WORDS.includes(currGuess.toLowerCase())) {
-                return pushError('Not in word list')
-            }
-
-            // If the guess is correct
-            if (currGuess.toUpperCase() === wordleWord) {
-                tileRow.guessed = true
-                // Do something
-                setTimeout(() => {
-                    const answerElem = createElement(
-                        'div',
-                        'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
-                        'Well Done!'
-                    )
-                    errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
-                }, 2.5 * 1000)
-                setTimeout(() => {
-                    updateLetterStatus(tileRow, wordleWord)
-                }, 3 * 1000)
-            } else {
-                tileRow.guessed = true
-                // Do something
-                if (currRow === 4) {
-                    const answerElem = createElement(
-                        'div',
-                        'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
-                        wordleWord.toUpperCase()
-                    )
-                    errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
-                }
-                setTimeout(() => {
-                    updateLetterStatus(tileRow, wordleWord)
-                }, 3 * 1000)
-            }
-            tiles[currRow] = tileRow
-            setTiles(tiles)
-            setRow(currRow + 1)
-            setIndex(0)
+            evaluateRow()
         }
 
         if (action === 'Backspace') {
@@ -150,11 +146,10 @@ export default function App(): JSX.Element {
             setIndex(currIndex - 1)
             setTiles(tiles)
         }
-        // const alphabets = 'abcdefghijklmnopqrstuvwxyz'
-        // if (alphabets.includes(action))
         if (ALPHABETS.includes(action.toLowerCase())) {
             if (currIndex === 5) return
             tiles[currRow].row[currIndex] = action.toUpperCase()
+
             setIndex(currIndex + 1)
             setTiles(tiles)
         }
@@ -168,8 +163,6 @@ export default function App(): JSX.Element {
         event.target.blur()
 
         handleGameAction(event.target.dataset.action)
-        // console.log(event.target.dataset.action)
-        // handle(event)
     }
     useEffect(() => {
         document.body.addEventListener('keyup', handleKeyUpEvent)
@@ -177,17 +170,21 @@ export default function App(): JSX.Element {
     })
 
     return (
-        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4">
+        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4 relative">
             <div
                 className="w-48 bg-transparent absolute p-3 space-y-4 z-10 top-28"
                 ref={errorSlideRef}></div>
 
-            <div className="wordle w-[20rem] h-[20rem] flex flex-col items-center justify-evenly">
+            {/* {allTimeStats ?? } */}
+            <EndScreen allTimeStats={allTimeStats} />
+
+            <div className="wordle w-[20rem] h-[24rem] flex flex-col items-center justify-evenly">
                 <WordleRow tileRow={tiles[0]} wordleWord={wordleWord} />
                 <WordleRow tileRow={tiles[1]} wordleWord={wordleWord} />
                 <WordleRow tileRow={tiles[2]} wordleWord={wordleWord} />
                 <WordleRow tileRow={tiles[3]} wordleWord={wordleWord} />
                 <WordleRow tileRow={tiles[4]} wordleWord={wordleWord} />
+                <WordleRow tileRow={tiles[5]} wordleWord={wordleWord} />
             </div>
 
             <div className="keyboard w-[30rem] h-[13rem] flex flex-col items-center justify-evenly">
