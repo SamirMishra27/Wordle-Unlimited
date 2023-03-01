@@ -1,12 +1,15 @@
-import './index.css'
-import WordleRow from './components/WordleRow'
 import { useState, useEffect, useRef, MutableRefObject, MouseEvent } from 'react'
-import WORDLE_WORDS from '../data/words'
-import { createElement, setLocalData } from './utils'
+
+import WordleRow from './components/WordleRow'
 import KeyboardKey from './components/KeyboardKey'
 import EndScreen from './components/EndScreen'
+
+import { createElement, setLocalData } from './utils'
+import { AllTimeStats, TileRow } from './types'
+
+import './index.css'
+import WORDLE_WORDS from '../data/words'
 import backspace from './assets/backspace.svg'
-import { TileRow } from './types'
 
 const randomWordIndex = Math.floor(Math.random() * WORDLE_WORDS.length)
 const wordleWord = WORDLE_WORDS[randomWordIndex].toUpperCase()
@@ -35,7 +38,7 @@ export default function App(): JSX.Element {
         correct: Array<string>(),
     })
     const errorSlideRef = useRef() as MutableRefObject<HTMLDivElement>
-    const [allTimeStats, setStats] = useState(null)
+    const [allTimeStats, setStats] = useState<AllTimeStats | null>(null)
 
     function pushError(string: string) {
         const errorChild = createElement(
@@ -104,25 +107,29 @@ export default function App(): JSX.Element {
             updateLetterStatus(tileRow, wordleWord)
 
             setTimeout(() => {
-                setLocalData('WIN', currRow)
+                const updatedStats = setLocalData('WIN', currRow)
+                setStats(updatedStats)
             }, 5 * 1000)
         } else {
             // The guess is not correct
             tileRow.guessed = true
-            // if (currRow === 4)
+
             if (currRow === 5) {
+                // All the guesses are used and player failed to guess the correct word
+                // Show the correct word in Error slide
                 const answerElem = createElement(
                     'div',
                     'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
                     wordleWord.toUpperCase()
                 )
                 errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
+
+                setTimeout(() => {
+                    const updatedStats = setLocalData('LOSS', currRow)
+                    setStats(updatedStats)
+                }, 5 * 1000)
             }
             updateLetterStatus(tileRow, wordleWord)
-
-            setTimeout(() => {
-                setLocalData('LOSS', currRow)
-            }, 5 * 1000)
         }
         tiles[currRow] = tileRow
         setTiles(tiles)
@@ -133,10 +140,12 @@ export default function App(): JSX.Element {
     function handleGameAction(action: string | undefined) {
         if (!action) return
 
+        // Check and evaluate the guess
         if (action === 'Enter') {
             evaluateRow()
         }
 
+        // Delete a letter from row
         if (action === 'Backspace') {
             if (currIndex === 0) return
 
@@ -146,6 +155,8 @@ export default function App(): JSX.Element {
             setIndex(currIndex - 1)
             setTiles(tiles)
         }
+
+        // It's an alphabet, insert it in the row
         if (ALPHABETS.includes(action.toLowerCase())) {
             if (currIndex === 5) return
             tiles[currRow].row[currIndex] = action.toUpperCase()
@@ -170,13 +181,13 @@ export default function App(): JSX.Element {
     })
 
     return (
-        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4 relative">
+        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4">
             <div
                 className="w-48 bg-transparent absolute p-3 space-y-4 z-10 top-28"
                 ref={errorSlideRef}></div>
 
-            {/* {allTimeStats ?? } */}
-            <EndScreen allTimeStats={allTimeStats} />
+            {allTimeStats && <EndScreen allTimeStats={allTimeStats} />}
+            {/* <EndScreen allTimeStats={allTimeStats} /> ?? */}
 
             <div className="wordle w-[20rem] h-[24rem] flex flex-col items-center justify-evenly">
                 <WordleRow tileRow={tiles[0]} wordleWord={wordleWord} />

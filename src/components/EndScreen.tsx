@@ -1,57 +1,49 @@
 import { AllTimeStats } from '../types'
 
-export default function EndScreen(props: { allTimeStats: AllTimeStats | null }) {
+export default function EndScreen(props: { allTimeStats: AllTimeStats }) {
     const { allTimeStats } = props
+    const winPerct = Math.ceil((allTimeStats.wins / allTimeStats.played) * 100)
+
+    const statsTable = [
+        ['Played', allTimeStats.played],
+        ['Win %', winPerct],
+        ['Daily Current Streak', allTimeStats.streak],
+        ['Daily Highest Streak', allTimeStats.highestStreak],
+    ]
+    const getWidth = (row: number) => Math.ceil((row / allTimeStats.played) * 100)
+
     return (
         <div className="end-screen w-2/6 h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0">
             <h4 className="text-left text-slate-200 font-bold text-lg w-3/5 pl-4">STATISTICS</h4>
             <div className="w-3/5 py-2 space-x-2 flex items-center justify-evenly text-white text-center">
-                <div className="flex-1 h-full">
-                    <p className="text-4xl">22</p>
-                    <p className="text-xs w-full">Played</p>
-                </div>
-                <div className="flex-1 h-full">
-                    <p className="text-4xl">22</p>
-                    <p className="text-xs w-full">Win %</p>
-                </div>
-                <div className="flex-1 h-full">
-                    <p className="text-4xl">22</p>
-                    <p className="text-xs w-full">Current Streak</p>
-                </div>
-                <div className="flex-1 h-full">
-                    <p className="text-4xl">22</p>
-                    <p className="text-xs w-full">Highest Streak</p>
-                </div>
+                {statsTable.map((statistic) => {
+                    return (
+                        <div className="flex-1 h-full grid grid-rows-2">
+                            <p className="text-4xl">{statistic[1]}</p>
+                            <p className="text-xs w-full flex items-center justify-center">
+                                {statistic[0]}
+                            </p>
+                        </div>
+                    )
+                })}
             </div>
 
             <h4 className="text-left to-slate-200 font-bold text-lg w-3/5 pl-4">
                 GUESS DISTRIBUTION
             </h4>
             <div className="w-3/5 text-slate-100 text-sm text-center ">
-                <div className="py-1 flex items-center justify-evenly space-x-2">
-                    <div className="font-bold w-3">1</div>
-                    <span className="w-full h-full bg-wrong rounded-md font-medium">100</span>
-                </div>
-                <div className="py-1 flex items-center justify-evenly space-x-2">
-                    <div className="font-bold w-3">2</div>
-                    <span className="w-full h-full bg-wrong rounded-md font-medium">100</span>
-                </div>
-                <div className="py-1 flex items-center justify-evenly space-x-2">
-                    <div className="font-bold w-3">3</div>
-                    <span className="w-full h-full bg-wrong rounded-md font-medium">100</span>
-                </div>
-                <div className="py-1 flex items-center justify-evenly space-x-2">
-                    <div className="font-bold w-3">4</div>
-                    <span className="w-full h-full bg-wrong rounded-md font-medium">100</span>
-                </div>
-                <div className="py-1 flex items-center justify-evenly space-x-2">
-                    <div className="font-bold w-3">5</div>
-                    <span className="w-full h-full bg-wrong rounded-md font-medium">100</span>
-                </div>
-                <div className="py-1 flex items-center justify-evenly space-x-2">
-                    <div className="font-bold w-3">6</div>
-                    <span className="w-full h-full bg-wrong rounded-md font-medium">100</span>
-                </div>
+                {allTimeStats.winsByAttempts.map((row, index) => {
+                    return (
+                        <div className="py-1 flex items-center justify-start space-x-2">
+                            <div className="font-bold w-3">{index + 1}</div>
+                            <span
+                                className="w-full bg-wrong rounded-md font-medium"
+                                style={{ width: `${getWidth(row) || 10}%` }}>
+                                {row}
+                            </span>
+                        </div>
+                    )
+                })}
             </div>
         </div>
     )
