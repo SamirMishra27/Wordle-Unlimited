@@ -5,21 +5,24 @@ import KeyboardKey from './components/KeyboardKey'
 import EndScreen from './components/EndScreen'
 
 import { createElement, setLocalData } from './utils'
-import { AllTimeStats, TileRow } from './types'
+import { AllTimeStats, TileRow, wordleAction } from './types'
 
 import './index.css'
 import WORDLE_WORDS from '../data/words'
 import backspace from './assets/backspace.svg'
 
-const randomWordIndex = Math.floor(Math.random() * WORDLE_WORDS.length)
-const wordleWord = WORDLE_WORDS[randomWordIndex].toUpperCase()
+function getRandomWordleWord() {
+    const randomWordIndex = Math.floor(Math.random() * WORDLE_WORDS.length)
+    const wordleWordAns = WORDLE_WORDS[randomWordIndex].toUpperCase()
+    return wordleWordAns
+}
 
 const ERR_EXP_AFTER = 2.2 * 1000
 const ALPHABETS = 'abcdefghijklmnopqrstuvwxyz'
 
 export default function App(): JSX.Element {
-    // const wordleWord = 'SAMIR'
-    // let allTimeStats;
+    const [wordleWord, setWordleWord] = useState<string>(getRandomWordleWord())
+    console.log(wordleWord);
 
     const [tiles, setTiles] = useState([
         { row: ['', '', '', '', ''], guessed: false },
@@ -29,6 +32,9 @@ export default function App(): JSX.Element {
         { row: ['', '', '', '', ''], guessed: false },
         { row: ['', '', '', '', ''], guessed: false },
     ])
+    // const [tiles, setTiles] = useState(
+    //     Array<TileRow>(6).fill({ row: ['', '', '', '', ''], guessed: false })
+    // )
     const [currRow, setRow] = useState(0)
     const [currIndex, setIndex] = useState(0)
 
@@ -39,6 +45,25 @@ export default function App(): JSX.Element {
     })
     const errorSlideRef = useRef() as MutableRefObject<HTMLDivElement>
     const [allTimeStats, setStats] = useState<AllTimeStats | null>(null)
+
+    function reset() {
+        // Reset and start a new game!
+        setWordleWord(getRandomWordleWord())
+        // setTiles(Array<TileRow>(6).fill({ row: ['', '', '', '', ''], guessed: false }))
+        setTiles([
+            { row: ['', '', '', '', ''], guessed: false },
+            { row: ['', '', '', '', ''], guessed: false },
+            { row: ['', '', '', '', ''], guessed: false },
+            { row: ['', '', '', '', ''], guessed: false },
+            { row: ['', '', '', '', ''], guessed: false },
+            { row: ['', '', '', '', ''], guessed: false },
+        ])
+        setRow(0)
+        setIndex(0)
+        // This method removes all children from element node
+        errorSlideRef.current.replaceChildren()
+        setStats(null)
+    }
 
     function pushError(string: string) {
         const errorChild = createElement(
@@ -137,7 +162,7 @@ export default function App(): JSX.Element {
         setIndex(0)
     }
 
-    function handleGameAction(action: string | undefined) {
+    function handleGameAction(action: wordleAction) {
         if (!action) return
 
         // Check and evaluate the guess
@@ -166,14 +191,14 @@ export default function App(): JSX.Element {
         }
     }
     function handleKeyUpEvent(event: globalThis.KeyboardEvent) {
-        handleGameAction(event.key)
+        handleGameAction(event.key as wordleAction)
     }
 
     function onKeyClick(event: MouseEvent<HTMLButtonElement>) {
         if (!(event.target instanceof HTMLButtonElement)) return
         event.target.blur()
 
-        handleGameAction(event.target.dataset.action)
+        handleGameAction(event.target.dataset.action as wordleAction)
     }
     useEffect(() => {
         document.body.addEventListener('keyup', handleKeyUpEvent)
@@ -186,8 +211,7 @@ export default function App(): JSX.Element {
                 className="w-48 bg-transparent absolute p-3 space-y-4 z-10 top-28"
                 ref={errorSlideRef}></div>
 
-            {allTimeStats && <EndScreen allTimeStats={allTimeStats} />}
-            {/* <EndScreen allTimeStats={allTimeStats} /> ?? */}
+            {allTimeStats && <EndScreen allTimeStats={allTimeStats} reset={reset} />}
 
             <div className="wordle w-[20rem] h-[24rem] flex flex-col items-center justify-evenly">
                 <WordleRow tileRow={tiles[0]} wordleWord={wordleWord} />

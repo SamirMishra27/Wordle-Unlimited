@@ -1,8 +1,9 @@
 import { AllTimeStats } from '../types'
 
-export default function EndScreen(props: { allTimeStats: AllTimeStats }) {
-    const { allTimeStats } = props
+export default function EndScreen(props: { allTimeStats: AllTimeStats; reset: () => void }) {
+    const { allTimeStats, reset } = props
     const winPerct = Math.ceil((allTimeStats.wins / allTimeStats.played) * 100)
+    const gamesLost = allTimeStats.played - allTimeStats.wins
 
     const statsTable = [
         ['Played', allTimeStats.played],
@@ -44,7 +45,24 @@ export default function EndScreen(props: { allTimeStats: AllTimeStats }) {
                         </div>
                     )
                 })}
+                <div className="py-1 flex items-center justify-start space-x-2">
+                    <div className="font-bold w-3">{'✘'}</div>
+                    <span
+                        className="w-full bg-wrong rounded-md font-medium"
+                        style={{ width: `${getWidth(gamesLost) || 10}%` }}>
+                        {gamesLost}
+                    </span>
+                </div>
             </div>
+
+            <button
+                className={
+                    'reset-button w-36 h-10 bg-correct rounded-2xl text-white text-sm font-medium p-px ' +
+                    'hover:bg-[#60a25a] transition active:bg-correct mt-4'
+                }
+                onClick={() => reset()}>
+                START NEW GAME
+            </button>
         </div>
     )
 }

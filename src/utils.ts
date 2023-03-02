@@ -14,7 +14,7 @@ export const sleep = (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export function setLocalData(result: string, attempt: number) {
+export function setLocalData(result: 'WIN' | 'LOSS', attempt: number) {
     let allTimeStats: AllTimeStats
 
     const value = localStorage.getItem('wordle-game-stats')
