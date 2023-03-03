@@ -22,19 +22,11 @@ const ALPHABETS = 'abcdefghijklmnopqrstuvwxyz'
 
 export default function App(): JSX.Element {
     const [wordleWord, setWordleWord] = useState<string>(getRandomWordleWord())
-    console.log(wordleWord);
-
-    const [tiles, setTiles] = useState([
-        { row: ['', '', '', '', ''], guessed: false },
-        { row: ['', '', '', '', ''], guessed: false },
-        { row: ['', '', '', '', ''], guessed: false },
-        { row: ['', '', '', '', ''], guessed: false },
-        { row: ['', '', '', '', ''], guessed: false },
-        { row: ['', '', '', '', ''], guessed: false },
-    ])
-    // const [tiles, setTiles] = useState(
-    //     Array<TileRow>(6).fill({ row: ['', '', '', '', ''], guessed: false })
-    // )
+    const [tiles, setTiles] = useState(
+        Array<TileRow | null>(6)
+            .fill(null)
+            .map((_) => ({ row: ['', '', '', '', ''], guessed: false }))
+    )
     const [currRow, setRow] = useState(0)
     const [currIndex, setIndex] = useState(0)
 
@@ -49,17 +41,18 @@ export default function App(): JSX.Element {
     function reset() {
         // Reset and start a new game!
         setWordleWord(getRandomWordleWord())
-        // setTiles(Array<TileRow>(6).fill({ row: ['', '', '', '', ''], guessed: false }))
-        setTiles([
-            { row: ['', '', '', '', ''], guessed: false },
-            { row: ['', '', '', '', ''], guessed: false },
-            { row: ['', '', '', '', ''], guessed: false },
-            { row: ['', '', '', '', ''], guessed: false },
-            { row: ['', '', '', '', ''], guessed: false },
-            { row: ['', '', '', '', ''], guessed: false },
-        ])
+        setTiles(
+            Array<TileRow | null>(6)
+                .fill(null)
+                .map((_) => ({ row: ['', '', '', '', ''], guessed: false }))
+        )
         setRow(0)
         setIndex(0)
+        setLetterStatus({
+            wrong: Array<string>(),
+            misplaced: Array<string>(),
+            correct: Array<string>(),
+        })
         // This method removes all children from element node
         errorSlideRef.current.replaceChildren()
         setStats(null)
