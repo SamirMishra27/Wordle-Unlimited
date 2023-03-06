@@ -60,7 +60,6 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                 : tileRow.row.map((letter, index) => {
                       return (
                           <WordleTile
-                              //   tile={tileRow.row[index]}
                               tile={letter}
                               style={TileColor.MISPLACED}
                               index={index}

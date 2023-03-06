@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, MutableRefObject, MouseEvent } from 'react'
-import html2canvas from 'html2canvas'
 
 import WordleRow from './components/WordleRow'
 import KeyboardKey from './components/KeyboardKey'
 import EndScreen from './components/EndScreen'
+import ClipboardModal from './components/ClipboardModal'
 
 import { createElement, setLocalData } from './utils'
 import { AllTimeStats, TileRow, wordleAction } from './types'
@@ -40,6 +40,7 @@ export default function App(): JSX.Element {
     const errorSlideRef = useRef() as MutableRefObject<HTMLDivElement>
     const wordleRef = useRef() as MutableRefObject<HTMLDivElement>
     const [allTimeStats, setStats] = useState<AllTimeStats | null>(null)
+    const [wordleCopy, setWordleCopy] = useState<Node | null>(null)
 
     function reset() {
         // Reset and start a new game!
@@ -201,11 +202,7 @@ export default function App(): JSX.Element {
         return () => document.body.removeEventListener('keyup', handleKeyUpEvent)
     })
 
-    async function copyTilesToClipboard(event: MouseEvent<HTMLButtonElement>) {
-        const canvas = await html2canvas(wordleRef.current)
-        const elemImage = new Image()
-        elemImage.src = canvas.toDataURL('image/png')
-    }
+    const removeCopy = () => setWordleCopy(null)
 
     return (
         <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4">
@@ -215,27 +212,28 @@ export default function App(): JSX.Element {
 
             <button
                 className={
-                    'copy-button w-20 h-10 bg-correct absolute top-4 right-4 rounded-2xl p-px ' +
+                    'copy-button w-16 h-10 bg-correct absolute top-4 right-6 rounded-2xl p-px ' +
                     'text-white text-sm font-medium ' +
-                    'hover:bg-[#60a25a] transition active:bg-correct mt-4'
+                    'hover:bg-[#60a25a] transition active:bg-correct mt-4 outline-transparent'
                 }
                 data-action="Copy"
-                onClick={(event) => {
-                    copyTilesToClipboard(event)
-                }}
                 title="Copy Current Tiles">
                 <img
                     src={share}
                     alt="Copy Current Tiles"
                     className="bg-transparent w-8 h-auto"
-                    onClick={(event) => {
-                        const target = event.target as HTMLImageElement
-                        target.parentElement?.click()
-                    }}
+                    onClick={() => setWordleCopy(wordleRef.current.cloneNode(true))}
                 />
             </button>
 
             {allTimeStats && <EndScreen allTimeStats={allTimeStats} reset={reset} />}
+            {wordleCopy && (
+                <ClipboardModal
+                    wordleCopy={wordleCopy}
+                    removeCopy={removeCopy}
+                    pushError={pushError}
+                />
+            )}
 
             <div
                 className="wordle w-[20rem] h-[24rem] flex flex-col items-center justify-evenly bg-background"
@@ -247,19 +245,6 @@ export default function App(): JSX.Element {
                 <WordleRow tileRow={tiles[4]} wordleWord={wordleWord} />
                 <WordleRow tileRow={tiles[5]} wordleWord={wordleWord} />
             </div>
-            <div
-                className="show-canvas absolute w-96 h-96 left-4"
-                onClick={(event) => {
-                    // const j = document.getElementsByClassName('show-canvas')[0]
-                    // const k = document.getElementsByClassName('wordle')[0]
-                    // const clone = k.cloneNode(true) as HTMLElement
-                    // for (let i = 0; i <= clone.children.length; i++) {
-                    //     for (let j = 0; j <= clone.children[i]?.length; j++) {
-                    //         clone.children[i].children[j].style.animation = ''
-                    //     }
-                    // }
-                    // html2canvas(k).then((canvas) => j.replaceChildren(canvas))
-                }}></div>
 
             <div className="keyboard w-[30rem] h-[13rem] flex flex-col items-center justify-evenly">
                 <div className="keyboard-row w-full h-1/3 flex items-center justify-evenly">

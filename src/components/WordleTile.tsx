@@ -19,6 +19,7 @@ export default function WordleTile(props: {
             tileRef.current.classList.remove('roll-tile')
             tileRef.current.classList.add('guessed')
         }, seconds(2))
+    else tileRef.current.style.backgroundColor = ''
     return (
         <div
             className={
