@@ -1,6 +1,7 @@
 import WordleTile from './WordleTile'
 import { useEffect, useState } from 'react'
 import { TileRow, TileColor } from '../types'
+import { seconds } from '../utils'
 
 export default function WordleRow(props: { tileRow: TileRow; wordleWord: string }) {
     const { tileRow, wordleWord } = props
@@ -8,7 +9,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
 
     useEffect(() => {
         if (tileRow.row.join('') === wordleWord) {
-            setTimeout(() => setCorrect(true), 2000)
+            setTimeout(() => setCorrect(true), seconds(2))
         }
     }, [tileRow.guessed])
     return (
@@ -26,6 +27,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                                   index={index}
                                   correct={isCorrect}
                                   roll={true}
+                                  guessed={true}
                               />
                           )
                       } else if (
@@ -39,6 +41,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                                   index={index}
                                   correct={isCorrect}
                                   roll={true}
+                                  guessed={true}
                               />
                           )
                       } else {
@@ -49,6 +52,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                                   index={index}
                                   correct={isCorrect}
                                   roll={true}
+                                  guessed={true}
                               />
                           )
                       }
@@ -56,11 +60,13 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                 : tileRow.row.map((letter, index) => {
                       return (
                           <WordleTile
-                              tile={tileRow.row[index]}
+                              //   tile={tileRow.row[index]}
+                              tile={letter}
                               style={TileColor.MISPLACED}
                               index={index}
                               correct={false}
                               roll={false}
+                              guessed={false}
                           />
                       )
                   })}

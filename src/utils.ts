@@ -14,6 +14,8 @@ export const sleep = (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+export const seconds = (s: number) => s * 1000
+
 export function setLocalData(result: 'WIN' | 'LOSS', attempt: number) {
     let allTimeStats: AllTimeStats
 

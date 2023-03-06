@@ -1,4 +1,5 @@
-import { CSSProperties } from 'react'
+import { CSSProperties, useRef, MutableRefObject } from 'react'
+import { seconds } from '../utils'
 
 export default function WordleTile(props: {
     tile: string
@@ -6,9 +7,18 @@ export default function WordleTile(props: {
     index: number
     correct: boolean
     roll: boolean
+    guessed: boolean
 }) {
-    const { tile, style, index, correct, roll } = props
+    const { tile, style, index, correct, roll, guessed } = props
     const inlineStyle = { '--index': `${index}s`, '--color': style } as CSSProperties
+
+    const tileRef = useRef() as MutableRefObject<HTMLDivElement>
+    if (guessed)
+        setTimeout(() => {
+            tileRef.current.style.backgroundColor = style
+            tileRef.current.classList.remove('roll-tile')
+            tileRef.current.classList.add('guessed')
+        }, seconds(2))
     return (
         <div
             className={
@@ -18,7 +28,8 @@ export default function WordleTile(props: {
                 (correct ? 'jump bg-correct border-correct ' : '') +
                 (roll ? 'roll-tile ' : '')
             }
-            style={inlineStyle}>
+            style={inlineStyle}
+            ref={tileRef}>
             {tile}
         </div>
     )

@@ -1,6 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+    img {
+        @apply inline-block;
+    }
+}
 
 :root {
     --default: #121213; 
@@ -37,6 +42,9 @@ body {
 
 .filled.border-correct {
     border: 3px solid var(--correct);
+}
+.filled.guessed {
+    border: 3px solid var(--color);
 }
 
 .wordle-tile:not(.filled){

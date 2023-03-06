@@ -9,6 +9,7 @@ module.exports = {
                 misplaced: '#b59f3b',
                 wrong: '#3a3a3c',
                 gray: '#818384',
+                background: '#0b0b0b',
             },
             borderColor: {
                 correct: '#538d4e',
