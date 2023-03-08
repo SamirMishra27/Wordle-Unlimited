@@ -35,8 +35,10 @@ export default function ClipboardModal(props: {
 
     useEffect(() => {
         if (wordleCopy) copyableRef.current.appendChild(wordleCopy)
+
         return
     }, [])
+
     return (
         <div
             className="clipboard-modal w-2/6 h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0 translate-y-[-40px] appear"

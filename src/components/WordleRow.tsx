@@ -12,6 +12,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
             setTimeout(() => setCorrect(true), seconds(2))
         }
     }, [tileRow.guessed])
+
     return (
         <div className="wordle-row w-full flex items-center justify-evenly flex-1 [column-gap:0.625rem] p-1 text-slate-200">
             {tileRow.guessed

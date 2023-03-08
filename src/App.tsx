@@ -16,6 +16,7 @@ import share from './assets/share.svg'
 function getRandomWordleWord() {
     const randomWordIndex = Math.floor(Math.random() * WORDLE_WORDS.length)
     const wordleWordAns = WORDLE_WORDS[randomWordIndex].toUpperCase()
+
     return wordleWordAns
 }
 
@@ -180,13 +181,14 @@ export default function App(): JSX.Element {
 
         // It's an alphabet, insert it in the row
         if (ALPHABETS.includes(action.toLowerCase())) {
-            if (currIndex === 5) return
+            if (currIndex === 6) return
             tiles[currRow].row[currIndex] = action.toUpperCase()
 
             setIndex(currIndex + 1)
             setTiles(tiles)
         }
     }
+
     function handleKeyUpEvent(event: globalThis.KeyboardEvent) {
         handleGameAction(event.key as wordleAction)
     }
@@ -199,6 +201,7 @@ export default function App(): JSX.Element {
     }
     useEffect(() => {
         document.body.addEventListener('keyup', handleKeyUpEvent)
+
         return () => document.body.removeEventListener('keyup', handleKeyUpEvent)
     })
 
@@ -208,7 +211,8 @@ export default function App(): JSX.Element {
         <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4">
             <div
                 className="w-48 bg-transparent absolute p-3 space-y-4 z-10 top-28"
-                ref={errorSlideRef}></div>
+                ref={errorSlideRef}
+            />
 
             <button
                 className={

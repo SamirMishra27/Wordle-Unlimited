@@ -46,7 +46,7 @@ export default function EndScreen(props: { allTimeStats: AllTimeStats; reset: ()
                     )
                 })}
                 <div className="py-1 flex items-center justify-start space-x-2">
-                    <div className="font-bold w-3">{'✘'}</div>
+                    <div className="font-bold w-3">✘</div>
                     <span
                         className="w-full bg-wrong rounded-md font-medium"
                         style={{ width: `${getWidth(gamesLost) || 10}%` }}>

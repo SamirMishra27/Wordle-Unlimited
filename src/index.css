@@ -7,14 +7,12 @@
     }
 }
 
+/* Abstract styles and variables */
 :root {
     --default: #121213; 
     --correct: #538d4e;
     --misplaced: #b59f3b;
     --wrong: #3a3a3c;
-
-    /* --filled-border: 3px solid #565758;
-    --unfilled-border: 3px solid #3a3a3c; */
     --filled-border: 2px solid #565758;
     --unfilled-border: 2px solid #3a3a3c;
 }
@@ -37,6 +35,7 @@ button {
     outline-color: transparent;
 }
 
+/* Main styles */
 .clipboard-modal.appear {
     animation: copy-modal-appear 600ms ease-in-out 0s 1 normal forwards;
 }
@@ -55,11 +54,10 @@ button {
 }
 
 .filled.border-correct {
-    /* border: 3px solid var(--correct); */
     border: 2px solid var(--correct);
 }
+
 .filled.guessed {
-    /* border: 3px solid var(--color); */
     border: 2px solid var(--color);
 }
 
@@ -68,6 +66,7 @@ button {
     border: var(--unfilled-border);
 }
 
+/* Animation effect classes */
 .roll-tile {
     animation: roll 600ms linear calc(var(--index) * 0.25) 1 normal forwards;
 }
@@ -80,6 +79,7 @@ button {
     animation: fade-out 200ms ease-in-out 2s 1 normal forwards;
 }
 
+/* All Animations Keyframes */
 @keyframes bounce {
     0%, 100% {
         transform: scale(1);
@@ -106,7 +106,6 @@ button {
         transform: translateY(-2rem);
     }
     0%, 100% {
-        /* border: 3px solid var(--color); */
         border: 2px solid var(--color);
     }
 }
@@ -140,7 +139,6 @@ button {
     }
     50.01%, 100% {
         background-color: var(--color);
-        /* border: 3px solid var(--color); */
         border: 2px solid var(--color);
     }
 }
