@@ -41,11 +41,10 @@ export function setLocalData(result: 'WIN' | 'LOSS', attempt: number) {
 
     const twoDays = 60 * 60 * 24 * 2
     if (Date.now() - allTimeStats.lastPlayed > twoDays) allTimeStats.streak = 0
-    else {
-        allTimeStats.streak += 1
-        if (allTimeStats.streak > allTimeStats.highestStreak)
-            allTimeStats.highestStreak = allTimeStats.streak
-    }
+    allTimeStats.streak += 1
+
+    if (allTimeStats.streak > allTimeStats.highestStreak)
+        allTimeStats.highestStreak = allTimeStats.streak
     allTimeStats.lastPlayed = Date.now()
 
     localStorage.setItem('wordle-game-stats', JSON.stringify(allTimeStats))

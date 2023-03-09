@@ -24,6 +24,7 @@ function getRandomWordleWord() {
 const ERR_EXP_AFTER = 2.2 * 1000
 const ALPHABETS = 'abcdefghijklmnopqrstuvwxyz'
 const MAX_WORDLE_ROWS = 6
+const MAX_WORDLE_COLUMNS = 5
 
 export default function App(): JSX.Element {
     const [wordleWord, setWordleWord] = useState<string>(getRandomWordleWord())
@@ -112,7 +113,7 @@ export default function App(): JSX.Element {
     }
 
     function evaluateRow() {
-        if (currIndex !== 5) {
+        if (currIndex !== MAX_WORDLE_COLUMNS) {
             return pushNotif('Not enough words')
         }
         const tileRow = tiles[currRow]
@@ -147,7 +148,7 @@ export default function App(): JSX.Element {
             // All the guesses are used and player
             // failed to guess the correct word
             // Show the correct word in Error slide
-            if (currRow === MAX_WORDLE_ROWS) {
+            if (currRow === MAX_WORDLE_ROWS - 1) {
                 const answerElem = createElement(
                     'div',
                     'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
@@ -189,7 +190,7 @@ export default function App(): JSX.Element {
 
         // It's an alphabet, insert it in the row
         if (ALPHABETS.includes(action.toLowerCase())) {
-            if (currIndex === MAX_WORDLE_ROWS) return
+            if (currIndex === MAX_WORDLE_COLUMNS) return
             tiles[currRow].row[currIndex] = action.toUpperCase()
 
             setIndex(currIndex + 1)
