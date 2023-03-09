@@ -5,7 +5,7 @@ import KeyboardKey from './components/KeyboardKey'
 import EndScreen from './components/EndScreen'
 import ClipboardModal from './components/ClipboardModal'
 
-import { createElement, setLocalData } from './utils'
+import { createElement, seconds, setLocalData } from './utils'
 import { AllTimeStats, TileRow, wordleAction } from './types'
 
 import './index.css'
@@ -20,15 +20,17 @@ function getRandomWordleWord() {
     return wordleWordAns
 }
 
+// Some constants
 const ERR_EXP_AFTER = 2.2 * 1000
 const ALPHABETS = 'abcdefghijklmnopqrstuvwxyz'
+const MAX_WORDLE_ROWS = 6
 
 export default function App(): JSX.Element {
     const [wordleWord, setWordleWord] = useState<string>(getRandomWordleWord())
     const [tiles, setTiles] = useState(
-        Array<TileRow | null>(6)
+        Array<TileRow | null>(MAX_WORDLE_ROWS)
             .fill(null)
-            .map((_) => ({ row: ['', '', '', '', ''], guessed: false }))
+            .map(() => ({ row: ['', '', '', '', ''], guessed: false }))
     )
     const [currRow, setRow] = useState(0)
     const [currIndex, setIndex] = useState(0)
@@ -38,40 +40,45 @@ export default function App(): JSX.Element {
         misplaced: Array<string>(),
         correct: Array<string>(),
     })
-    const errorSlideRef = useRef() as MutableRefObject<HTMLDivElement>
+    const notifSlideRef = useRef() as MutableRefObject<HTMLDivElement>
     const wordleRef = useRef() as MutableRefObject<HTMLDivElement>
+
     const [allTimeStats, setStats] = useState<AllTimeStats | null>(null)
     const [wordleCopy, setWordleCopy] = useState<Node | null>(null)
+
+    const removeCopy = () => setWordleCopy(null)
 
     function reset() {
         // Reset and start a new game!
         setWordleWord(getRandomWordleWord())
         setTiles(
-            Array<TileRow | null>(6)
+            Array<TileRow | null>(MAX_WORDLE_ROWS)
                 .fill(null)
-                .map((_) => ({ row: ['', '', '', '', ''], guessed: false }))
+                .map(() => ({ row: ['', '', '', '', ''], guessed: false }))
         )
+        // Reset index and row
         setRow(0)
         setIndex(0)
+        // Resetting letter status to remove keyboard formatting
         setLetterStatus({
             wrong: Array<string>(),
             misplaced: Array<string>(),
             correct: Array<string>(),
         })
         // This method removes all children from element node
-        errorSlideRef.current.replaceChildren()
+        notifSlideRef.current.replaceChildren()
         setStats(null)
     }
 
-    function pushError(string: string) {
+    function pushNotif(string: string) {
         const errorChild = createElement(
             'div',
             'bg-slate-200 p-2 text-center font-semibold rounded-lg delete-after',
             string
         )
-        errorSlideRef.current.insertBefore(errorChild, errorSlideRef.current.firstChild)
+        notifSlideRef.current.insertBefore(errorChild, notifSlideRef.current.firstChild)
         setTimeout(() => {
-            errorSlideRef.current.removeChild(errorChild)
+            notifSlideRef.current.removeChild(errorChild)
         }, ERR_EXP_AFTER)
     }
 
@@ -106,14 +113,14 @@ export default function App(): JSX.Element {
 
     function evaluateRow() {
         if (currIndex !== 5) {
-            return pushError('Not enough words')
+            return pushNotif('Not enough words')
         }
         const tileRow = tiles[currRow]
         const currGuess = tileRow.row.join('')
 
         // If the word is not in global list
         if (!WORDLE_WORDS.includes(currGuess.toLowerCase())) {
-            return pushError('Not in word list')
+            return pushNotif('Not in word list')
         }
 
         // If the guess is correct
@@ -125,32 +132,33 @@ export default function App(): JSX.Element {
                     'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
                     'Well Done!'
                 )
-                errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
-            }, 2.5 * 1000)
+                notifSlideRef.current.insertBefore(answerElem, notifSlideRef.current.firstChild)
+            }, seconds(2.5))
             updateLetterStatus(tileRow, wordleWord)
 
             setTimeout(() => {
                 const updatedStats = setLocalData('WIN', currRow)
                 setStats(updatedStats)
-            }, 5 * 1000)
+            }, seconds(5))
         } else {
             // The guess is not correct
             tileRow.guessed = true
 
-            if (currRow === 5) {
-                // All the guesses are used and player failed to guess the correct word
-                // Show the correct word in Error slide
+            // All the guesses are used and player
+            // failed to guess the correct word
+            // Show the correct word in Error slide
+            if (currRow === MAX_WORDLE_ROWS) {
                 const answerElem = createElement(
                     'div',
                     'bg-slate-200 p-2 text-center font-semibold rounded-lg text-lg',
                     wordleWord.toUpperCase()
                 )
-                errorSlideRef.current.insertBefore(answerElem, errorSlideRef.current.firstChild)
+                notifSlideRef.current.insertBefore(answerElem, notifSlideRef.current.firstChild)
 
                 setTimeout(() => {
                     const updatedStats = setLocalData('LOSS', currRow)
                     setStats(updatedStats)
-                }, 5 * 1000)
+                }, seconds(5))
             }
             updateLetterStatus(tileRow, wordleWord)
         }
@@ -181,7 +189,7 @@ export default function App(): JSX.Element {
 
         // It's an alphabet, insert it in the row
         if (ALPHABETS.includes(action.toLowerCase())) {
-            if (currIndex === 6) return
+            if (currIndex === MAX_WORDLE_ROWS) return
             tiles[currRow].row[currIndex] = action.toUpperCase()
 
             setIndex(currIndex + 1)
@@ -205,13 +213,11 @@ export default function App(): JSX.Element {
         return () => document.body.removeEventListener('keyup', handleKeyUpEvent)
     })
 
-    const removeCopy = () => setWordleCopy(null)
-
     return (
         <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4">
             <div
                 className="w-48 bg-transparent absolute p-3 space-y-4 z-10 top-28"
-                ref={errorSlideRef}
+                ref={notifSlideRef}
             />
 
             <button
@@ -235,7 +241,7 @@ export default function App(): JSX.Element {
                 <ClipboardModal
                     wordleCopy={wordleCopy}
                     removeCopy={removeCopy}
-                    pushError={pushError}
+                    pushNotif={pushNotif}
                 />
             )}
 

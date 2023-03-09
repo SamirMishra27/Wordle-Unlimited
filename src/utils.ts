@@ -49,5 +49,6 @@ export function setLocalData(result: 'WIN' | 'LOSS', attempt: number) {
     allTimeStats.lastPlayed = Date.now()
 
     localStorage.setItem('wordle-game-stats', JSON.stringify(allTimeStats))
+
     return allTimeStats
 }

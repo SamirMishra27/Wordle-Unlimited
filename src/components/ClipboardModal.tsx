@@ -5,9 +5,9 @@ import { seconds } from '../utils'
 export default function ClipboardModal(props: {
     wordleCopy: Node | null
     removeCopy: () => void
-    pushError: (s: string) => void
+    pushNotif: (s: string) => void
 }) {
-    const { wordleCopy, removeCopy, pushError } = props
+    const { wordleCopy, removeCopy, pushNotif } = props
     const copyableRef = useRef() as MutableRefObject<HTMLDivElement>
     const selfRef = useRef() as MutableRefObject<HTMLDivElement>
 
@@ -22,7 +22,7 @@ export default function ClipboardModal(props: {
             navigator.clipboard.write([clipboardItem])
         })
         // Send notification
-        pushError('Copied to clipboard!')
+        pushNotif('Copied to clipboard!')
 
         // Clean up
         disappear()
