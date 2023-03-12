@@ -215,7 +215,7 @@ export default function App(): JSX.Element {
     })
 
     return (
-        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative overflow-hidden space-y-4">
+        <div className="w-full tall:h-[100vh] flex flex-col items-center justify-center relative overflow-x-hidden space-y-4">
             <div
                 className="w-48 bg-transparent absolute p-3 space-y-4 z-10 top-28"
                 ref={notifSlideRef}
@@ -223,7 +223,7 @@ export default function App(): JSX.Element {
 
             <button
                 className={
-                    'copy-button w-16 h-10 bg-correct absolute top-4 right-6 rounded-2xl p-px ' +
+                    'copy-button w-12 sm:w-16 h-8 sm:h-10 bg-correct absolute top-0 sm:top-4 right-2 sm:right-6 rounded-2xl p-px ' +
                     'text-white text-sm font-medium ' +
                     'hover:bg-[#60a25a] transition active:bg-correct mt-4 outline-transparent'
                 }
@@ -232,7 +232,7 @@ export default function App(): JSX.Element {
                 <img
                     src={share}
                     alt="Copy Current Tiles"
-                    className="bg-transparent w-8 h-auto"
+                    className="bg-transparent w-6 sm:w-8 h-auto"
                     onClick={() => setWordleCopy(wordleRef.current.cloneNode(true))}
                 />
             </button>
@@ -257,7 +257,7 @@ export default function App(): JSX.Element {
                 <WordleRow tileRow={tiles[5]} wordleWord={wordleWord} />
             </div>
 
-            <div className="keyboard w-[30rem] h-[13rem] flex flex-col items-center justify-evenly">
+            <div className="keyboard w-[99%] sm:w-[30rem] h-48 sm:h-[13rem] flex flex-col items-center justify-evenly">
                 <div className="keyboard-row w-full h-1/3 flex items-center justify-evenly">
                     {'QWERTYUIOP'.split('').map((alphabet) => {
                         return (
@@ -282,7 +282,7 @@ export default function App(): JSX.Element {
                 </div>
                 <div className="keyboard-row w-full h-1/3 flex items-center justify-evenly">
                     <button
-                        className="w-16 h-16 bg-gray text-white text-sm font-semibold rounded-[4px] text-center flex items-center justify-center"
+                        className="w-16 h-14 sm:h-16 bg-gray text-white text-sm font-semibold sm:rounded-[4px] rounded-lg text-center flex items-center justify-center"
                         data-action="Enter"
                         onClick={(event) => {
                             onKeyClick(event)
@@ -301,7 +301,7 @@ export default function App(): JSX.Element {
                     })}
 
                     <button
-                        className="w-14 h-16 bg-gray text-white text-base font-semibold rounded-[4px] flex items-center justify-center"
+                        className="w-14 h-14 sm:h-16 bg-gray text-white text-base font-semibold sm:rounded-[4px] rounded-lg flex items-center justify-center"
                         data-action="Backspace"
                         onClick={(event) => {
                             onKeyClick(event)

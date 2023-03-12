@@ -14,6 +14,12 @@ module.exports = {
             borderColor: {
                 correct: '#538d4e',
             },
+            screens: {
+                xs: '320px',
+                // => @media (min-width: 320px) { ... }
+                tall: { raw: '(min-height: 624px)' },
+                // => @media (min-height: 800px) { ... }
+            },
         },
     },
     plugins: [],

@@ -41,7 +41,7 @@ export default function ClipboardModal(props: {
 
     return (
         <div
-            className="clipboard-modal w-2/6 h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0 translate-y-[-40px] appear"
+            className="clipboard-modal w-5/6 md::w-2/6 h-[70%] md:h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0 translate-y-[-40px] appear"
             ref={selfRef}>
             <div
                 className="copyable-wordle h-auto flex flex-col items-center justify-evenly bg-default"
@@ -52,14 +52,14 @@ export default function ClipboardModal(props: {
             </div>
             <button
                 className={
-                    'reset-button w-36 h-10 bg-correct rounded-2xl text-white text-sm font-medium p-px ' +
+                    'reset-button w-32 sm:w-36 h-8 sm:h-10 bg-correct rounded-2xl text-white text-xs sm:text-sm font-medium p-px ' +
                     'hover:bg-[#60a25a] transition active:bg-correct mt-4'
                 }
                 onClick={() => copyTilesToClipboard()}>
                 Copy to clipboard!
             </button>
             <button
-                className="w-10 h-auto absolute top-3 right-3 fill-white hover:fill-slate-200 active:fill-white"
+                className="w-6 md:w-10 h-auto absolute top-0 md:top-3 right-1 md:right-3 fill-white hover:fill-slate-200 active:fill-white"
                 onClick={() => disappear()}>
                 <svg
                     width="48px"

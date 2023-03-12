@@ -16,7 +16,7 @@ export default function KeyboardKey(props: {
     return (
         <div
             className={
-                'w-10 h-16 text-white text-base font-semibold rounded-[4px] text-center flex items-center justify-center ' +
+                'sm:w-10 w-9 h-14 sm:h-16 text-white text-base font-semibold sm:rounded-[4px] rounded-lg text-center flex items-center justify-center ' +
                 bgColor
             }>
             <button
