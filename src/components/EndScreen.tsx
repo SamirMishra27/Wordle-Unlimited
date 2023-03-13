@@ -14,9 +14,11 @@ export default function EndScreen(props: { allTimeStats: AllTimeStats; reset: ()
     const getWidth = (row: number) => Math.ceil((row / allTimeStats.played) * 100)
 
     return (
-        <div className="end-screen w-2/6 h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0">
-            <h4 className="text-left text-slate-200 font-bold text-lg w-3/5 pl-4">STATISTICS</h4>
-            <div className="w-3/5 py-2 space-x-2 flex items-center justify-evenly text-white text-center">
+        <div className="end-screen w-5/6 md:w-4/6 xl:w-2/6 h-[90%] tall:h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0">
+            <h4 className="text-left text-slate-200 font-bold text-sm md:text-lg w-5/6 md:w-3/5 pl-2 md:pl-4">
+                STATISTICS
+            </h4>
+            <div className="w-5/6 md:w-3/5 py-2 space-x-2 flex items-center justify-evenly text-white text-center">
                 {statsTable.map((statistic) => {
                     return (
                         <div className="flex-1 h-full grid grid-rows-2">
@@ -29,10 +31,10 @@ export default function EndScreen(props: { allTimeStats: AllTimeStats; reset: ()
                 })}
             </div>
 
-            <h4 className="text-left to-slate-200 font-bold text-lg w-3/5 pl-4">
+            <h4 className="text-left text-slate-200 font-bold text-sm md:text-lg w-5/6 md:w-3/5 pl-2 md:pl-4">
                 GUESS DISTRIBUTION
             </h4>
-            <div className="w-3/5 text-slate-100 text-sm text-center ">
+            <div className="w-5/6 md:w-3/5 text-slate-100 text-sm text-center ">
                 {allTimeStats.winsByAttempts.map((row, index) => {
                     return (
                         <div className="py-1 flex items-center justify-start space-x-2">
@@ -57,7 +59,7 @@ export default function EndScreen(props: { allTimeStats: AllTimeStats; reset: ()
 
             <button
                 className={
-                    'reset-button w-36 h-10 bg-correct rounded-2xl text-white text-sm font-medium p-px ' +
+                    'reset-button w-32 md:w-36 h-10 bg-correct rounded-2xl text-white text-xs md:text-sm font-medium p-px ' +
                     'hover:bg-[#60a25a] transition active:bg-correct mt-4'
                 }
                 onClick={() => reset()}>

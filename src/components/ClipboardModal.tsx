@@ -41,7 +41,7 @@ export default function ClipboardModal(props: {
 
     return (
         <div
-            className="clipboard-modal w-5/6 md::w-2/6 h-[70%] md:h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0 translate-y-[-40px] appear"
+            className="clipboard-modal w-5/6 md:w-2/6 h-[70%] md:h-4/5 bg-default absolute z-10 rounded-lg flex flex-col items-center justify-center space-y-4 opacity-0 translate-y-[-40px] appear"
             ref={selfRef}>
             <div
                 className="copyable-wordle h-auto flex flex-col items-center justify-evenly bg-default"
