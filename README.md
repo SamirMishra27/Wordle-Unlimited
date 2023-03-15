@@ -1,3 +1,11 @@
+# Hack-a-thon Winning Project! 🎉🎊
+
+The project was a part of [ReactPlay.io's #2PlaysAMonth](http://reactplay.io/) Hack-a-thon event! February 2023
+I won the hack-a-thon with my 2 submissions, **[Cricket game](https://github.com/reactplay/react-play/pull/972) & [Wordle game!](https://github.com/reactplay/react-play/pull/1038)**
+Result announcement [Here!](https://www.linkedin.com/feed/update/urn:li:activity:7041807237345947650/)
+
+-----
+
 # My take on the Wordle Game!
 
 🤔 Wordle is a 5-letter word guessing puzzle with limited attempts to test your rich vocabulary and guessing skills!
@@ -49,5 +57,15 @@ If you have an amazing idea or want to fix an issue, do contribute to this proje
 1. Fork this repository - [Link](https://github.com/SamirMishra27/wordle-clone/fork)
 2. `git clone <Your fork link>`
 3. `npm install`
-4. `npm dev`
-<!-- 4. `git checkout -b <New feature name>` -->
+4. `npm run dev`
+
+
+### Instructions for Contributing
+1. Fork this repository - [Link](https://github.com/SamirMishra27/wordle-clone/fork)
+2. `git clone <Your fork link>`
+3. `npm install`
+4. `git checkout -b <New feature name>`
+5. Write your code for the new feature
+6. `npm run dev` and test the feature properly alongside all other functionalities.
+7. Commit the changes!
+8. Make a pull request!
