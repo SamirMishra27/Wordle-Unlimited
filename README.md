@@ -21,7 +21,7 @@ Result announcement [Here!](https://www.linkedin.com/feed/update/urn:li:activity
 
 ### Tech Stack
 
-Project was created with Made using **TypeScript**, **TailwindCSS** and **React**
+Project was created with **TypeScript**, **TailwindCSS** and **React**
 <p>
 <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="48px" height="48px"/>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="48px" height="48px"/>
