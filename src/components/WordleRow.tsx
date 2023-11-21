@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { TileRow, TileColor } from '../types'
 import { seconds } from '../utils'
 
-export default function WordleRow(props: { tileRow: TileRow; wordleWord: string }) {
-    const { tileRow, wordleWord } = props
+export default function WordleRow(props: { rowNo: number; tileRow: TileRow; wordleWord: string }) {
+    const { rowNo, tileRow, wordleWord } = props
     const [isCorrect, setCorrect] = useState(false)
 
     useEffect(() => {
@@ -26,6 +26,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                                   tile={letter}
                                   style={TileColor.CORRECT}
                                   index={index}
+                                  key={`tile-${rowNo}-${index}`}
                                   correct={isCorrect}
                                   roll={true}
                                   guessed={true}
@@ -40,6 +41,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                                   tile={letter}
                                   style={TileColor.MISPLACED}
                                   index={index}
+                                  key={`tile-${rowNo}-${index}`}
                                   correct={isCorrect}
                                   roll={true}
                                   guessed={true}
@@ -51,6 +53,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                                   tile={letter}
                                   style={TileColor.WRONG}
                                   index={index}
+                                  key={`tile-${rowNo}-${index}`}
                                   correct={isCorrect}
                                   roll={true}
                                   guessed={true}
@@ -64,6 +67,7 @@ export default function WordleRow(props: { tileRow: TileRow; wordleWord: string 
                               tile={letter}
                               style={TileColor.MISPLACED}
                               index={index}
+                              key={`tile-${rowNo}-${index}`}
                               correct={false}
                               roll={false}
                               guessed={false}

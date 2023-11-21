@@ -198,10 +198,12 @@ export default function App(): JSX.Element {
         }
     }
 
+    // Physical keyboard event handler
     function handleKeyUpEvent(event: globalThis.KeyboardEvent) {
         handleGameAction(event.key as wordleAction)
     }
 
+    // Virtual keyboard event handler
     function onKeyClick(event: MouseEvent<HTMLButtonElement>) {
         if (!(event.target instanceof HTMLButtonElement)) return
         event.target.blur()
@@ -249,12 +251,12 @@ export default function App(): JSX.Element {
             <div
                 className="wordle w-[20rem] h-[24rem] flex flex-col items-center justify-evenly bg-background"
                 ref={wordleRef}>
-                <WordleRow tileRow={tiles[0]} wordleWord={wordleWord} />
-                <WordleRow tileRow={tiles[1]} wordleWord={wordleWord} />
-                <WordleRow tileRow={tiles[2]} wordleWord={wordleWord} />
-                <WordleRow tileRow={tiles[3]} wordleWord={wordleWord} />
-                <WordleRow tileRow={tiles[4]} wordleWord={wordleWord} />
-                <WordleRow tileRow={tiles[5]} wordleWord={wordleWord} />
+                <WordleRow rowNo={0} tileRow={tiles[0]} wordleWord={wordleWord} />
+                <WordleRow rowNo={1} tileRow={tiles[1]} wordleWord={wordleWord} />
+                <WordleRow rowNo={2} tileRow={tiles[2]} wordleWord={wordleWord} />
+                <WordleRow rowNo={3} tileRow={tiles[3]} wordleWord={wordleWord} />
+                <WordleRow rowNo={4} tileRow={tiles[4]} wordleWord={wordleWord} />
+                <WordleRow rowNo={5} tileRow={tiles[5]} wordleWord={wordleWord} />
             </div>
 
             <div className="keyboard w-[99%] sm:w-[30rem] h-48 sm:h-[13rem] flex flex-col items-center justify-evenly">
